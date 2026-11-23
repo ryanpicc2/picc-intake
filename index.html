@@ -80,6 +80,7 @@ table.g .chip{padding:2px 8px;font-size:13px}
 table.g input[type=text],table.g textarea.grow{padding:4px 6px}
 .gscroll{overflow-x:auto}
 .score{font-variant-numeric:tabular-nums;font-weight:600;text-align:right;white-space:nowrap}
+.both{color:var(--warn);font-size:13px;font-weight:600}.both:empty{display:none}
 .totals{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:8px;font-size:13.5px}
 .totals span b{font-variant-numeric:tabular-nums}
 .secnotes{margin-top:14px}
@@ -286,7 +287,7 @@ const S=[
   ["Rifaximin / neomycin / other antibiotic"],["Herbal antimicrobials (berberine, oregano, allicin, neem…)"],["Elemental diet"],["Low-FODMAP / SCD / SIBO diet"],["Probiotics (which?)"],["Enzymes / HCl / bitters"],["Prokinetics (ginger/artichoke, prucalopride, LDN)"],["Binders / biofilm disruptors"],["Other"]]},
 ]},
 {id:"7",title:"Symptom scores",items:[
- {id:"7A",num:"A",t:"fs",q:"Digestive symptoms – past 2 weeks",c:1,hint:"How often: 0 never · 1 once or twice · 2 a few times/wk · 3 most days · 4 daily. How bad: 0 none · 1 mild · 2 moderate, affects my day · 3 severe.",rows:[
+ {id:"7A",num:"A",t:"fs",q:"Digestive symptoms – past 2 weeks",c:1,hint:"Answer both for each symptom you have. How often: 0 never · 1 once or twice · 2 a few times/wk · 3 most days · 4 daily. How bad: 0 none · 1 mild · 2 moderate, affects my day · 3 severe.",rows:[
   ["7A.1","Heartburn / burning in chest","Reflux"],["7A.2","Acid or food coming back up","Reflux"],["7A.3","Upper belly pain or discomfort","Upper"],["7A.4","Nausea","Upper"],["7A.5","Full too quickly","Upper"],["7A.6","Belching / burping","Upper"],["7A.7","Bloating (fullness, pressure)","Bloat/gas"],["7A.8","Visible swelling / distension","Bloat/gas"],["7A.9","Passing a lot of gas","Bloat/gas"],["7A.10","Sulfur / rotten-egg gas","Bloat/gas"],["7A.11","Rumbling / gurgling","Bloat/gas"],["7A.12","Lower belly pain or cramping","Pain"],["7A.13","Hard or lumpy stools","Constipation"],["7A.14","Infrequent bowel movements","Constipation"],["7A.15","Straining","Constipation"],["7A.16","Not feeling fully emptied","Constipation"],["7A.17","Loose or watery stools","Diarrhea"],["7A.18","Urgency","Diarrhea"],["7A.19","Frequent BMs (3+/day)","Diarrhea"],["7A.20","Loose stools soon after eating","Diarrhea"],["7A.21","Greasy, floating or oily stools","Malabsorption"],["7A.22","Mucus in stool","Other"]]},
  {id:"7B",num:"B",t:"rate",q:"Whole-body symptoms – past 30 days",hint:"0 not at all · 1 mild or rare · 2 moderate or weekly · 3 frequent or significant · 4 daily or severe.",rows:[
   ["Energy","Tiredness / fatigue"],["Energy","Afternoon energy crash"],["Energy","Sleepy after meals"],["Energy","“Tired but wired” at night"],
@@ -505,9 +506,9 @@ const F=["0","1","2","3","4"],SV=["0","1","2","3"];
 function fsIn(it){const box=h("div");const sc=h("div",{class:"gscroll"});const t=h("table",{class:"g"},h("tr",{},h("th",{},"#"),h("th",{},"Symptom"),h("th",{},"How often 0–4"),h("th",{},"How bad 0–3")));
   const tot=h("div",{class:"totals"});
   const paintTot=()=>{const r=fsScores(it);tot.innerHTML="";Object.entries(r.cl).forEach(([k,v])=>tot.append(h("span",{},k+": ",h("b",{},String(v)))));tot.append(h("span",{},"Total: ",h("b",{},r.total+" / 264")));};
-  it.rows.forEach(([rid,lbl])=>{const g=()=>(A[it.id]||{})[rid]||{};const scoreCell=h("td",{class:"score"});const upd=()=>{const v=g();scoreCell.textContent=(v.f!=null&&v.s!=null)?String(v.f*v.s):"";paintTot();};
+  it.rows.forEach(([rid,lbl])=>{const g=()=>(A[it.id]||{})[rid]||{};const scoreCell=h("td",{class:"score"});const both=h("div",{class:"both",role:"status"});const upd=()=>{const v=g();both.textContent=(v.f>0&&v.s==null)?"Please also answer “How bad”":(v.f==null&&v.s>0)?"Please also answer “How often”":"";scoreCell.textContent=(v.f!=null&&v.s!=null)?String(v.f*v.s):"";paintTot();};
     const put=(k,v)=>{const all=Object.assign({},A[it.id]||{});const r=Object.assign({},all[rid]||{});if(v==="")delete r[k];else r[k]=+v;if(Object.keys(r).length)all[rid]=r;else delete all[rid];set(it.id,all);upd();};
-    t.append(h("tr",{},h("td",{class:"id"},rid.replace("7A.","")),h("td",{class:"lbl"},lbl),h("td",{},chips(F,()=>g().f!=null?String(g().f):"",v=>put("f",v),false)),h("td",{},chips(SV,()=>g().s!=null?String(g().s):"",v=>put("s",v),false)),scoreCell));upd();});
+    t.append(h("tr",{},h("td",{class:"id"},rid.replace("7A.","")),h("td",{class:"lbl"},lbl,both),h("td",{},chips(F,()=>g().f!=null?String(g().f):"",v=>put("f",v),false)),h("td",{},chips(SV,()=>g().s!=null?String(g().s):"",v=>put("s",v),false)),scoreCell));upd();});
   sc.append(t);box.append(sc,tot);paintTot();return box;}
 function fsScores(it){const v=A[it.id]||{};const cl={};let total=0;it.rows.forEach(([rid,,c])=>{const r=v[rid]||{};const s=(r.f!=null&&r.s!=null)?r.f*r.s:0;cl[c]=(cl[c]||0)+s;total+=s;});return{cl,total};}
 function rateIn(it){const box=h("div");const sc=h("div",{class:"gscroll"});const t=h("table",{class:"g"},h("tr",{},h("th",{},"System"),h("th",{},"Symptom"),h("th",{},"0–4")));const tot=h("div",{class:"totals"});
