@@ -210,6 +210,7 @@ const S=[
  {id:"3.1a",t:"multi",q:"Diagnosed with any of these? — Digestive",c:1,other:1,years:"Year diagnosed",o:["IBS-C","IBS-D","IBS-M","SIBO – hydrogen","SIBO – methane / IMO","SIBO – hydrogen sulfide","SIBO – type unknown","GERD / reflux","H. pylori","Gastritis or ulcer","Celiac disease","Gluten sensitivity","Lactose intolerance","Crohn’s disease","Ulcerative colitis","Microscopic colitis","Diverticulosis / diverticulitis","Gastroparesis","Pancreatitis / pancreatic insufficiency","Gallstones / gallbladder disease","Fatty liver / high liver enzymes","Candida / yeast overgrowth","Parasites","“Leaky gut”","Histamine intolerance / MCAS","Hemorrhoids / fissures","Pelvic floor dysfunction"]},
  {id:"3.1b",t:"multi",q:"Diagnosed with any of these? — Metabolic and hormonal",c:1,years:"Year diagnosed",o:["Prediabetes / insulin resistance","Type 2 diabetes","Type 1 diabetes","Gestational diabetes (past)","Metabolic syndrome","High blood pressure","High cholesterol / triglycerides","Hypothyroidism","Hashimoto’s","Hyperthyroidism / Graves’","PCOS","Endometriosis","Low testosterone","“Adrenal fatigue”"]},
  {id:"3.1c",t:"multi",q:"Diagnosed with any of these? — Other",c:1,other:1,years:"Year diagnosed",o:["Anemia / iron deficiency","B12 deficiency","Low vitamin D","Heart disease","Kidney disease","Sleep apnea","Asthma","Seasonal allergies","Other autoimmune","Cancer","Depression","Anxiety","ADHD","Eating disorder (past/present)","Migraines","Chronic fatigue","Fibromyalgia","Long COVID","Mold illness / Lyme"]},
+ {id:"3.1d",t:"para",q:"Any other health conditions we haven’t asked about?",hint:"Include anything you were born with or that runs in your blood or genes (for example blood, bleeding or clotting disorders), and conditions affecting your heart, lungs, kidneys, liver, spleen, nerves, bones or immune system. Add the year diagnosed and who treats it. Write “none” if there’s nothing else.",c:1},
  {id:"3.2",t:"multi",q:"Surgeries",c:1,other:1,years:"Year",o:["Gallbladder removed","Appendix removed","Bowel/colon resection","Ileocecal valve affected","Weight-loss surgery","Stomach/esophagus surgery (hiatal hernia, fundoplication)","Hernia repair","C-section","Hysterectomy","Other abdominal/pelvic surgery"]},
  {id:"3.9",t:"one",q:"Do you have bloodwork or other test results from the last 12 months?",hint:"If yes, please send them to Ryan separately.",o:["Yes","No","Not sure"],c:1},
  {id:"3.3",t:"para",q:"Hospital stays or major illnesses (what and when)"},
@@ -218,6 +219,8 @@ const S=[
 ]},
 {id:"4",title:"Medications, supplements and allergies",items:[
  {id:"4.1",t:"table",q:"Current prescription and over-the-counter medications",cols:["Medication","Dose","How often","Started","Why"],c:1},
+ {id:"4.4",t:"table",q:"Current supplements, vitamins, herbs, probiotics, protein powders",cols:["Product + brand","Dose","How often","How long","Why","Helping?"],c:1},
+ {id:"4.5",t:"para",q:"Supplements you stopped because they made you feel worse (probiotics, fiber, iron, magnesium…)",c:1},
  {id:"4.2",t:"grid",q:"Ever taken any of these regularly (more than ~2 weeks)?",c:1,cols:["Never","Past","Current"],fields:["When / how long / dose"],rows:[
   ["Acid blockers – PPIs (omeprazole, pantoprazole, Nexium)"],
   ["Acid blockers – H2 (famotidine/Pepcid)"],
@@ -243,8 +246,6 @@ const S=[
  {id:"4.3b",t:"one",q:"Antibiotic courses in your lifetime (roughly)",o:["Few (0–5)","Some (6–15)","Many (15+)","Not sure"],c:1},
  {id:"4.3c",t:"para",q:"Most recent antibiotic: what, when, why? Did digestion change afterwards?",c:1},
  {id:"4.3d",t:"one",q:"Ever taken rifaximin (Xifaxan) or neomycin?",o:YN,c:1},
- {id:"4.4",t:"table",q:"Current supplements, vitamins, herbs, probiotics, protein powders",cols:["Product + brand","Dose","How often","How long","Why","Helping?"],c:1},
- {id:"4.5",t:"para",q:"Supplements you stopped because they made you feel worse (probiotics, fiber, iron, magnesium…)",c:1},
  {id:"4.6a",t:"text",q:"Allergies – medications",c:1},
  {id:"4.6b",t:"text",q:"Allergies – foods (true allergic reactions). Carry an epinephrine pen?",c:1},
  {id:"4.6c",t:"text",q:"Allergies – environmental / latex / other"}
@@ -393,7 +394,7 @@ const S=[
 /* ============ NUMBERING + VISIBILITY ============
    Display numbers are assigned automatically, so adding/removing questions never leaves duplicates or gaps.
    Saved answers are keyed by the internal id, which never changes. */
-const P1=new Set(["1.2", "1.3", "1.5h", "1.5w", "1.5x", "1.11", "14.11", "3.9", "1.8", "1.9a", "1.9b", "14.1", "14.2", "14.3", "14.4a", "14.4b", "14.8", "14.9", "info2", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.11", "2.12", "2.13", "2.14", "2.15", "ryan2", "3.1a", "3.1b", "3.1c", "3.2", "ryan3", "4.1", "ryan4", "4.4", "4.6a", "4.6b", "4.6c", "h61", "6.1.1", "6.1.2", "h65", "6.5.1", "7A", "9.0", "info9", "9.2", "9.3", "9.3g", "ryan9g", "14.10"]);
+const P1=new Set(["1.2", "1.3", "1.5h", "1.5w", "1.5x", "1.11", "14.11", "3.9", "1.8", "1.9a", "1.9b", "14.1", "14.2", "14.3", "14.4a", "14.4b", "14.8", "14.9", "info2", "2.1", "2.2", "2.3", "2.4", "2.5", "2.6", "2.7", "2.8", "2.9", "2.10", "2.11", "2.12", "2.13", "2.14", "2.15", "ryan2", "3.1a", "3.1b", "3.1c", "3.1d", "3.2", "ryan3", "4.1", "ryan4", "4.4", "4.6a", "4.6b", "4.6c", "h61", "6.1.1", "6.1.2", "h65", "6.5.1", "7A", "9.0", "info9", "9.2", "9.3", "9.3g", "ryan9g", "14.10"]);
 const INPUT_T=it=>!["sub","ryan","info"].includes(it.t);
 const inMode=(s,it)=>!meta.part||s.ryanOnly||P1.has(it.id);
 let NUM={},SUBNUM={},SNUM={};
